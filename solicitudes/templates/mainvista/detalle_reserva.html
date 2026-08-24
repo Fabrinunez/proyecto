@@ -1,0 +1,53 @@
+{% extends 'mainvista/base.html' %}
+
+{% block content %}
+
+<h2 class="mb-4">Detalle de la Reserva #{{ pedido.id }}</h2>
+
+<div class="card shadow-sm mb-4">
+    <div class="card-body">
+        <h5 class="card-title">{{ pedido.cliente_nombre }}</h5>
+        <p><strong>Correo:</strong> {{ pedido.cliente_email }}</p>
+        <p><strong>Fecha del evento:</strong> {{ pedido.fecha_evento }}</p>
+
+        <p>
+            <strong>Estado:</strong>
+            <span class="badge 
+                {% if pedido.estado == 'PENDIENTE' %}bg-warning text-dark
+                {% elif pedido.estado == 'CONFIRMADO' %}bg-primary
+                {% elif pedido.estado == 'FINALIZADO' %}bg-success
+                {% elif pedido.estado == 'CANCELADO' %}bg-danger
+                {% endif %}">
+                {{ pedido.get_estado_display }}
+            </span>
+        </p>
+
+        <p><strong>Total:</strong> ${{ pedido.total }}</p>
+    </div>
+</div>
+
+<h4>Servicios / Mobiliario Contratado</h4>
+
+<div class="row">
+    {% for producto in pedido.productos.all %}
+    <div class="col-md-4 mb-3">
+        <div class="card h-100 shadow-sm">
+            {% if producto.imagen %}
+            <img src="{{ producto.imagen.url }}" class="card-img-top" alt="{{ producto.nombre }}">
+            {% endif %}
+
+            <div class="card-body">
+                <h5 class="card-title">{{ producto.nombre }}</h5>
+                <p class="text-muted">{{ producto.get_categoria_display }}</p>
+                <p>${{ producto.precio }}</p>
+            </div>
+        </div>
+    </div>
+    {% empty %}
+    <p class="text-muted">No hay productos asociados a esta reserva.</p>
+    {% endfor %}
+</div>
+
+<a href="{% url 'reservas' %}" class="btn btn-secondary mt-3">Volver</a>
+
+{% endblock %}

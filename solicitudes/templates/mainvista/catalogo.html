@@ -1,0 +1,45 @@
+{% extends 'mainvista/base.html' %}
+
+{% block content %}
+
+<h2 class="mb-4">Catálogo de Servicios y Mobiliario</h2>
+
+<div class="row">
+    {% for producto in productos %}
+    <div class="col-md-4 mb-4">
+        <div class="card h-100 shadow-sm">
+
+            {% if producto.imagen %}
+            <img src="{{ producto.imagen.url }}" class="card-img-top" alt="{{ producto.nombre }}">
+            {% endif %}
+
+            <div class="card-body">
+                <h5 class="card-title">{{ producto.nombre }}</h5>
+
+                <p class="card-text text-muted">
+                    Categoría: {{ producto.get_categoria_display }}
+                </p>
+
+                {% if producto.descripcion %}
+                <p class="card-text">{{ producto.descripcion }}</p>
+                {% endif %}
+
+                <h6 class="text-success fw-bold">
+                    ${{ producto.precio }}
+                </h6>
+            </div>
+
+            <div class="card-footer bg-white border-top-0">
+                <a href="{% url 'crear_pedido' %}" class="btn btn-primary w-100">
+                    Reservar este servicio
+                </a>
+            </div>
+
+        </div>
+    </div>
+    {% empty %}
+    <p class="text-muted">No hay servicios registrados en el catálogo.</p>
+    {% endfor %}
+</div>
+
+{% endblock %}

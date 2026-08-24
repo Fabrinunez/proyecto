@@ -1,0 +1,38 @@
+{% extends 'mainvista/base.html' %}
+
+{% block content %}
+<h2 class="mb-4">Reservar Evento</h2>
+
+<form method="POST">
+    {% csrf_token %}
+
+    <div class="mb-3">
+        <label class="form-label">Nombre del Cliente</label>
+        <input type="text" name="cliente_nombre" class="form-control" required>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Correo del Cliente</label>
+        <input type="email" name="cliente_email" class="form-control" required>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Fecha del Evento</label>
+        <input type="date" name="fecha_evento" class="form-control" required>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Servicios / Mobiliario</label>
+        <select name="productos_ids" multiple class="form-select" required>
+            {% for producto in productos %}
+                <option value="{{ producto.id }}">
+                    {{ producto.nombre }} — ${{ producto.precio }}
+                </option>
+            {% endfor %}
+        </select>
+        <small class="text-muted">Mantén presionado CTRL para seleccionar varios.</small>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Confirmar Reserva</button>
+</form>
+{% endblock %}
